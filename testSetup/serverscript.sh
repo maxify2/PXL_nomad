@@ -1,19 +1,8 @@
 #!/bin/bash
-sudo yum install -y yum-utils
-sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
-sudo yum -y install consul
-sudo yum -y install nomad
+#todo consul als server zetten in config
 sudo systemctl start consul
-sudo systemctl start nomad
-sudo systemctl enable consul
-sudo systemctl enable nomad
 
-sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-sudo yum -y install docker-ce docker-ce-cli containerd.io
-sudo systemctl start docker
-sudo systemctl enable docker
-
-mkdir /opt/nomad/server
+sudo mkdir /opt/nomad/server
 
 cat <<EOF >/etc/nomad.d/nomad.hcl
 data_dir = "/opt/nomad/server"
@@ -24,4 +13,9 @@ server {
 }
 EOF
 
-#nomad agent -config /etc/nomad.d/server.hcl
+
+sudo systemctl start nomad
+sudo systemctl enable consul
+sudo systemctl enable nomad
+#server.vm.network "forwarded_port", guest: 4646, host: 4646
+
