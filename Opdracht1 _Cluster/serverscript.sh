@@ -4,7 +4,7 @@
 sed -i '/#server = true/c\server = true' /etc/consul.d/consul.hcl
 
 lastLine=`tail -1 /etc/consul.d/consul.hcl`
-if [ $lastLine!='bind_addr = "192.168.1.10"' ]
+if [ lastLine!="bind_addr = \"192.168.1.10\"" ]
 then
 cat <<EOF >>/etc/consul.d/consul.hcl
 bind_addr = "192.168.1.10"

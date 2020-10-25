@@ -2,7 +2,7 @@
 
 #consul configuration
 lastLine=`tail -1 /etc/consul.d/consul.hcl`
-if [ $lastLine!='bind_addr = "192.168.1.11"' ]
+if [ lastLine!="bind_addr = \"192.168.1.11\"" ]
 then
 cat <<EOF >>/etc/consul.d/consul.hcl
 retry_join = ["192.168.1.10"]
