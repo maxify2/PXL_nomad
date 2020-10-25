@@ -21,7 +21,7 @@ data_dir = "/opt/nomad/client1"
 bind_addr = "{{ GetInterfaceIP \"eth1\" }}"
 client {
     enabled = true
-    servers = ["192.168.1.10:4646"]
+    servers = ["192.168.1.10:4647"]
 }
 ports {
     http = "5656"

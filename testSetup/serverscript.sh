@@ -27,5 +27,45 @@ EOF
 sudo systemctl start nomad
 sudo systemctl enable consul
 sudo systemctl enable nomad
-#server.vm.network "forwarded_port", guest: 4646, host: 4646
+
+cat <<EOF >httpd.nomad
+job "webserver" {
+  datacenters = ["dc1"]
+  type = "service"
+
+  group "webserver" {
+    task "webserver" {
+      driver = "docker"
+
+      config {
+        image = "httpd"
+        force_pull = true
+        port_map = {
+          webserver_web = 80
+        }
+        logging {
+          type = "journald"
+          config {
+            tag = "WEBSERVER"
+          }
+        }
+      }
+      service {
+        name = "webserver"
+        port = "webserver_web"
+      }
+
+      resources {
+        network {
+          port "webserver_web" {
+            static = 8000
+          }
+        }
+      }
+    }
+  }
+}
+EOF
+sleep 5s
+sudo nomad job run -address=http://192.168.1.10:4646 httpd.nomad
 
