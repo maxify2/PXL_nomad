@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#todo retryjoin in consul.hcl
-
+#consul configuration
 lastLine=`tail -1 /etc/consul.d/consul.hcl`
 if [ $lastLine!='bind_addr = "192.168.1.11"' ]
 then
@@ -16,6 +15,7 @@ sudo systemctl start consul
 
 sudo mkdir /opt/nomad/client1
 
+#nomad configuration
 cat <<EOF >/etc/nomad.d/nomad.hcl
 data_dir = "/opt/nomad/client1"
 bind_addr = "{{ GetInterfaceIP \"eth1\" }}"

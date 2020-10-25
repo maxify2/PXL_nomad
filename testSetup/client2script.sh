@@ -1,5 +1,6 @@
 #!/bin/bash
-#todo retryjoin in consul.hcl
+
+#consul configuration
 lastLine=`tail -1 /etc/consul.d/consul.hcl`
 if [ $lastLine!='bind_addr = "192.168.1.12"' ]
 then
@@ -14,6 +15,7 @@ sudo systemctl start consul
 
 sudo mkdir /opt/nomad/client2
 
+#nomad configuration
 cat <<EOF >/etc/nomad.d/nomad.hcl
 data_dir = "/opt/nomad/client2"
 bind_addr = "{{ GetInterfaceIP \"eth1\" }}"
@@ -40,3 +42,46 @@ EOF
 sudo systemctl start nomad
 sudo systemctl enable consul
 sudo systemctl enable nomad
+
+#create httpd job
+cat <<EOF >httpd.nomad
+job "webserver" {
+  datacenters = ["dc1"]
+  type = "service"
+
+  group "webserver" {
+    task "webserver" {
+      driver = "docker"
+
+      config {
+        image = "httpd"
+        force_pull = true
+        port_map = {
+          webserver_web = 80
+        }
+        logging {
+          type = "journald"
+          config {
+            tag = "WEBSERVER"
+          }
+        }
+      }
+      service {
+        name = "webserver"
+        port = "webserver_web"
+      }
+
+      resources {
+        network {
+          port "webserver_web" {
+            static = 8000
+          }
+        }
+      }
+    }
+  }
+}
+EOF
+
+#run httpd job
+sudo nomad job run -address=http://192.168.1.10:4646 httpd.nomad
