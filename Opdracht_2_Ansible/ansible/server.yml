@@ -30,21 +30,12 @@
         - docker-engine
       state: removed
 
-  - name: Install Docker3
+  - name: install Docker
     yum:
-      name: containerd.io
-      state: latest
-     
-
-  - name: Install Docker
-    yum:
-      name: docker-ce
-      state: latest
-      
-
-  - name: Install Docker2
-    yum:
-      name: docker-ce-cli
+      name:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
       state: latest
 
   - name: Add repository HashiCorp
@@ -62,6 +53,46 @@
     yum:
       name: nomad
       state: latest
+
+
+ # - name: start Docker
+ #   service:
+ #     name: docker
+ #     state: started
+ #     enabled: yes
+
+ # - name: start consul
+ #   service:
+ #     name: consul
+ #     state: started
+ #     enabled: yes
+
+ # - name: start nomad
+ #   service:
+ #     name: nomad
+ #     state: started
+ #     enabled: yes
+
+#  - name: nomad server config
+#    copy:
+#      src: files/nomadserver.hcl
+#      dest: /etc/nomad.d/nomad.hcl
+
+#  - name: nomad client config
+#    copy:
+#      src: files/nomadclient.hcl
+#      dest: /etc/nomad.d/nomad.hcl
+
+#  - name: consul server config
+#    copy:
+#      src: files/consulserver.hcl
+#     dest: /etc/consul.d/consul.hcl
+
+#  - name: consul client config
+#    copy:
+#      src: files/consulclient.hcl
+#      dest: /etc/consul.d/consul.hcl
+
 
 
 
