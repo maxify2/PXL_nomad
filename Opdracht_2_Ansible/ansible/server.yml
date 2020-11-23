@@ -10,11 +10,24 @@
       state: latest
 
   #Docker repository downloaden
-  - name: Add repository Docker
-    yum_repository:
-      name: docker
-      description: Docker YUM repo
-      baseurl: https://download.docker.com/linux/centos/$releasever/$basearch/stable
+  #- name: Add repository Docker
+  #  yum_repository:
+  #    name: docker
+  #    description: Docker YUM repo
+  #    baseurl: https://download.docker.com/linux/centos/$releasever/$basearch/stable
+
+  - name: Configuring docker-ce repo
+    get_url:
+      url: https://download.docker.com/linux/centos/docker-ce.repo
+      dest: /etc/yum.repos.d/docker-ce.repo
+      mode: 0644
+
+  - name: Configuring hashicorp repo
+    get_url:
+      url: https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+      dest: /etc/yum.repos.d/hashicorp.repo
+      mode: 0644
+
       
   # Als docker geïnstalleerd is, deze dan verwijderen
   - name: Remove docker if installed from CentOS repo
@@ -30,19 +43,27 @@
         - docker-engine
       state: removed
 
-  - name: install Docker
+  - name: install Docker1
     yum:
-      name:
-        - docker-ce
-        - docker-ce-cli
-        - containerd.io
+      name: containerd.io
+      state: latest
+      
+  - name: install Docker2
+    yum:
+      name: docker-ce
       state: latest
 
-  - name: Add repository HashiCorp
-    yum_repository:
-      name: HashiCorp
-      description: HashiCorp repo
-      baseurl: https://rpm.releases.hashicorp.com/RHEL/$releasever/$basearch/stable
+  - name: install Docker3
+    yum:
+      name: docker-ce-cli
+      state: latest
+
+
+  #- name: Add repository HashiCorp
+  #  yum_repository:
+  #    name: HashiCorp
+  #    description: HashiCorp repo
+  #    baseurl: https://rpm.releases.hashicorp.com/RHEL/$releasever/$basearch/stable
 
   - name: Install Consul
     yum:
