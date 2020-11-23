@@ -1,0 +1,68 @@
+---
+- hosts: all
+  become: true
+  tasks: 
+
+  #yum-utils installeren
+  - name: install yum-utils
+    yum:
+      name: yum-utils
+      state: latest
+
+  #Docker repository downloaden
+  - name: Add repository Docker
+    yum_repository:
+      name: docker
+      description: Docker YUM repo
+      baseurl: https://download.docker.com/linux/centos/$releasever/$basearch/stable
+      
+  # Als docker geïnstalleerd is, deze dan verwijderen
+  - name: Remove docker if installed from CentOS repo
+    yum:
+      name:
+        - docker
+        - docker-client
+        - docker-client-latest
+        - docker-common
+        - docker-latest
+        - docker-latest-logrotate
+        - docker-logrotate
+        - docker-engine
+      state: removed
+
+  - name: Install Docker3
+    yum:
+      name: containerd.io
+      state: latest
+     
+
+  - name: Install Docker
+    yum:
+      name: docker-ce
+      state: latest
+      
+
+  - name: Install Docker2
+    yum:
+      name: docker-ce-cli
+      state: latest
+
+  - name: Add repository HashiCorp
+    yum_repository:
+      name: HashiCorp
+      description: HashiCorp repo
+      baseurl: https://rpm.releases.hashicorp.com/RHEL/$releasever/$basearch/stable
+
+  - name: Install Consul
+    yum:
+      name: consul
+      state: latest
+
+  - name: Install Nomad
+    yum:
+      name: nomad
+      state: latest
+
+
+
+ 
