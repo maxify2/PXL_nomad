@@ -1,1 +1,21 @@
-{\rtf1}
+- name: Configuring hashicorp repo
+  get_url:
+    url: https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+    dest: /etc/yum.repos.d/hashicorp.repo
+    mode: 0644
+
+- name: Install Nomad
+  yum:
+    name: nomad
+    state: latest
+
+- name: nomad.hcl config
+  copy:
+    src: "{{ nomad_config_srcpath }}"
+    dest: /etc/nomad.d/nomad.hcl
+
+- name: start nomad
+  service:
+    name: nomad
+    state: started
+    enabled: yes

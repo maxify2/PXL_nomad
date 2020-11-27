@@ -2,7 +2,6 @@
 # vi: set ft=ruby :
 VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  #config.vbguest.auto_update = false
   config.vm.box = "centos/7"
 
   config.vm.define "server" do |server|
@@ -10,19 +9,57 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     server.vm.network "private_network", ip: "10.0.0.10"
 
     server.vm.provision "ansible_local" do |ansible|
-      ansible.config_file = "ansible/ansible.cfg"
-      ansible.playbook = "ansible/server.yml"
+      #ansible.inventory_path = "ansible/inventory/hosts"
+      #ansible.config_file = "ansible/ansible.cfg"
+      ansible.groups = {
+        "servers" => ["server"],
+        "clients" => ["client1","client2"]
+      }
+      ansible.host_vars = {
+        "server" => {"ansible_connection" => "local",
+                     "nomad_config_srcpath" => "files/nomadserver.hcl"}
+      }
+      ansible.playbook = "ansible/playbook.yml"
     end
-
   end
 
   config.vm.define "client1" do |client1|
       client1.vm.hostname = "client1"
       client1.vm.network "private_network", ip: "10.0.0.11"
+
+      client1.vm.provision "ansible_local" do |ansible|
+      ansible.groups = {
+        "servers" => ["server"],
+        "clients" => ["client1","client2"]
+      }
+      ansible.host_vars = {
+        "client1" => {"ansible_connection" => "local",
+                      "nomad_config_srcpath" => "files/nomadclient.hcl"}
+      }
+      ansible.playbook = "ansible/playbook.yml"
+    end
   end
 
- config.vm.define "client2" do |client2|
+
+  config.vm.define "client2" do |client2|
       client2.vm.hostname = "client2"
       client2.vm.network "private_network", ip: "10.0.0.12"
+
+      client2.vm.provision "ansible_local" do |ansible|
+      ansible.groups = {
+        "servers" => ["server"],
+        "clients" => ["client1","client2"]
+      }
+      ansible.host_vars = {
+        "client2" => {"ansible_connection" => "local",
+                      "nomad_config_srcpath" => "files/nomadclient.hcl"}
+      }
+      ansible.playbook = "ansible/playbook.yml"
+    end
   end
 end
+
+#"client1" => {"ansible_ssh_host" => "127.0.0.1",
+  #              "ansible_ssh_port" => 22,
+  #              "ansible_ssh_user" => "vagrant",
+  #              "ansible_ssh_private_key_file" => "/vagrant/ansible/private_key"}

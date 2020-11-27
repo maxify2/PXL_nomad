@@ -1,1 +1,19 @@
-{\rtf1}
+- name: Configuring docker-ce repo
+  get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+    mode: 0644
+
+- name: install Docker
+  yum:
+    name: 
+      - containerd.io
+      - docker-ce
+      - docker-ce-cli
+    state: latest
+
+- name: start Docker
+  service:
+    name: docker
+    state: started
+    enabled: yes

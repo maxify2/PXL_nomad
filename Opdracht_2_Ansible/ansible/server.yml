@@ -3,6 +3,10 @@
   become: true
   tasks: 
 
+  - name: create hostsfile
+    copy:
+      src: inventory/hosts
+      dest: /etc/ansible/hosts
   #yum-utils installeren
   - name: install yum-utils
     yum:
@@ -12,7 +16,7 @@
   #Docker repository downloaden
   #- name: Add repository Docker
   #  yum_repository:
-  #    name: docker
+  #    name: docker-ce
   #    description: Docker YUM repo
   #    baseurl: https://download.docker.com/linux/centos/$releasever/$basearch/stable
 
@@ -28,40 +32,17 @@
       dest: /etc/yum.repos.d/hashicorp.repo
       mode: 0644
 
-      
-  # Als docker geïnstalleerd is, deze dan verwijderen
-  - name: Remove docker if installed from CentOS repo
+  - name: install Docker
     yum:
-      name:
-        - docker
-        - docker-client
-        - docker-client-latest
-        - docker-common
-        - docker-latest
-        - docker-latest-logrotate
-        - docker-logrotate
-        - docker-engine
-      state: removed
-
-  - name: install Docker1
-    yum:
-      name: containerd.io
+      name: 
+        - containerd.io
+        - docker-ce
+        - docker-ce-cli
       state: latest
-      
-  - name: install Docker2
-    yum:
-      name: docker-ce
-      state: latest
-
-  - name: install Docker3
-    yum:
-      name: docker-ce-cli
-      state: latest
-
 
   #- name: Add repository HashiCorp
   #  yum_repository:
-  #    name: HashiCorp
+  #    name: hashicorp
   #    description: HashiCorp repo
   #    baseurl: https://rpm.releases.hashicorp.com/RHEL/$releasever/$basearch/stable
 
@@ -76,11 +57,16 @@
       state: latest
 
 
- # - name: start Docker
- #   service:
- #     name: docker
- #     state: started
- #     enabled: yes
+  - name: start Docker
+    service:
+      name: docker
+      state: started
+      enabled: yes
+
+  - name: nomad server config
+    copy:
+      src: files/nomadserver.hcl
+      dest: /etc/nomad.d/nomad.hcl
 
  # - name: start consul
  #   service:
@@ -88,11 +74,11 @@
  #     state: started
  #     enabled: yes
 
- # - name: start nomad
- #   service:
- #     name: nomad
- #     state: started
- #     enabled: yes
+  - name: start nomad
+    service:
+      name: nomad
+      state: started
+      enabled: yes
 
 #  - name: nomad server config
 #    copy:

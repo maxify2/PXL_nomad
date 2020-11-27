@@ -1,0 +1,6 @@
+[servers]
+server ansible_connection=local
+
+[clients]
+client1 ansible_connection=local
+client2 ansible_connection=local
