@@ -8,3 +8,14 @@
   yum:
     name: consul
     state: latest
+
+- name: consul.hcl config
+  copy:
+    src: "{{ consul_config_srcpath }}"
+    dest: /etc/consul.d/consul.hcl
+
+- name: start consul
+  service:
+    name: consul
+    state: started
+    enabled: yes
