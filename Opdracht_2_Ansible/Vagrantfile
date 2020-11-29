@@ -18,7 +18,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ansible.host_vars = {
         "server" => {"ansible_connection" => "local",
                      "nomad_config_srcpath" => "files/nomadserver.hcl",
-                     "consul_bind_addr_ip" => "\"10.0.0.10\"",
+                     "consul_bind_addr_ip" => "10.0.0.10",
                      "consul_server_true" => "server = true",
                      "consul_bootstrap_1" => "bootstrap_expect=1",
                      "retry_join_client" => ""}
@@ -39,10 +39,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ansible.host_vars = {
         "client1" => {"ansible_connection" => "local",
                       "nomad_config_srcpath" => "files/nomadclient.hcl",
-                      "consul_bind_addr_ip" => "\"10.0.0.11\"",
+                      "consul_bind_addr_ip" => "10.0.0.11",
                       "consul_server_true" => "server = false",
                       "consul_bootstrap_1" => "",
-                      "retry_join_client" => "[\"10.0.0.10\"]"}
+                      "retry_join_client" => "10.0.0.10"}
       }
       ansible.playbook = "ansible/playbook.yml"
     end
@@ -61,17 +61,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ansible.host_vars = {
        "client2" => {"ansible_connection" => "local",
                       "nomad_config_srcpath" => "files/nomadclient.hcl",
-                      "consul_bind_addr_ip" => "\"10.0.0.12\"",
+                      "consul_bind_addr_ip" => "10.0.0.12",
                       "consul_server_true" => "server = false",
                       "consul_bootstrap_1" => "",
-                      "retry_join_client" => "[\"10.0.0.10\"]"}
+                      "retry_join_client" => "10.0.0.10"}
       }
       ansible.playbook = "ansible/playbook.yml"
     end
   end
 end
-
-#"client1" => {"ansible_ssh_host" => "127.0.0.1",
-  #              "ansible_ssh_port" => 22,
-  #              "ansible_ssh_user" => "vagrant",
-  #              "ansible_ssh_private_key_file" => "/vagrant/ansible/private_key"}

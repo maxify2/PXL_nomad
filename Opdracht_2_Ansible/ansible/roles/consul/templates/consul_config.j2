@@ -80,7 +80,7 @@ ui = true
 #retry_join = ["provider=gce project_name=... tag_value=..."]
 
 
-bind_addr = {{ consul_bind_addr_ip }}
+bind_addr = "{{ consul_bind_addr_ip }}"
 {{ consul_server_true }}
 {{ consul_bootstrap_1 }}
-{{ retry_join_client }}
+retry_join = ["{{ retry_join_client }}"]
