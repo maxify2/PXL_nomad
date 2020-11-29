@@ -79,15 +79,7 @@ ui = true
 #retry_join = ["provider=azure tag_name=... tag_value=... tenant_id=... client_id=... subscription_id=... secret_access_key=..."]
 #retry_join = ["provider=gce project_name=... tag_value=..."]
 
-<<<<<<< HEAD
 bind_addr = "{{ consul_bind_addr_ip }}"
 {{ consul_server_true }}
 {{ consul_bootstrap_1 }}
 retry_join = ["{{ retry_join_client }}"]
-=======
-
-bind_addr = "{{ consul_bind_addr_ip }}"
-{{ consul_server_true }}
-{{ consul_bootstrap_1 }}
-retry_join = ["{{ retry_join_client }}"]
->>>>>>> df4e225c68fb1bed6f77305f65170af6b9e2862c

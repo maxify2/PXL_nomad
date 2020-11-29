@@ -59,7 +59,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "clients" => ["client1","client2"]
       }
       ansible.host_vars = {
-       "client2" => {"ansible_connection" => "local",
+        "client2" => {"ansible_connection" => "local",
                       "nomad_config_srcpath" => "files/nomadclient.hcl",
                       "consul_bind_addr_ip" => "10.0.0.12",
                       "consul_server_true" => "server = false",

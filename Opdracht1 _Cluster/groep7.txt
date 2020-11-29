@@ -1,0 +1,50 @@
+[root@server ~]# cat groep7
+● consul.service - "HashiCorp Consul - A service mesh solution"
+   Loaded: loaded (/usr/lib/systemd/system/consul.service; enabled; vendor preset: disabled)
+   Active: active (running) since Tue 2020-10-27 10:57:41 UTC; 1min 49s ago
+     Docs: https://www.consul.io/
+  Process: 3754 ExecStop=/usr/bin/consul leave (code=exited, status=0/SUCCESS)
+ Main PID: 3762 (consul)
+    Tasks: 7
+   Memory: 23.2M
+   CGroup: /system.slice/consul.service
+           └─3762 /usr/bin/consul agent -config-dir=/etc/consul.d/
+
+Oct 27 10:57:49 server consul[3762]: 2020-10-27T10:57:49.788Z [INFO]  agent.leader: started routine: routine="intermediate cert renew watch"
+Oct 27 10:57:49 server consul[3762]: 2020-10-27T10:57:49.788Z [INFO]  agent.leader: started routine: routine="CA root pruning"
+Oct 27 10:57:49 server consul[3762]: 2020-10-27T10:57:49.788Z [INFO]  agent.server: member joined, marking health alive: member=server
+Oct 27 10:57:49 server consul[3762]: 2020-10-27T10:57:49.803Z [INFO]  agent.server: federation state anti-entropy synced
+Oct 27 10:57:50 server consul[3762]: 2020-10-27T10:57:50.941Z [INFO]  agent: Synced node info
+Oct 27 10:57:50 server consul[3762]: 2020-10-27T10:57:50.945Z [INFO]  agent: Synced service: service=_nomad-server-waa2of46q4kpw4oq76ier5pjyaaehlm5
+Oct 27 10:57:50 server consul[3762]: 2020-10-27T10:57:50.949Z [INFO]  agent: Synced service: service=_nomad-server-qei5yervlasg7uj2ujjoxmyh4tere4w4
+Oct 27 10:57:50 server consul[3762]: 2020-10-27T10:57:50.953Z [INFO]  agent: Synced service: service=_nomad-server-hpgflzoiozcyeienplhequ7c36b3r4yi
+Oct 27 10:58:26 server consul[3762]: 2020-10-27T10:58:26.511Z [INFO]  agent.server.serf.lan: serf: EventMemberJoin: client2 192.168.1.12
+Oct 27 10:58:26 server consul[3762]: 2020-10-27T10:58:26.512Z [INFO]  agent.server: member joined, marking health alive: member=client2
+Node     Address            Status  Type    Build  Protocol  DC   Segment
+server   192.168.1.10:8301  alive   server  1.8.5  2         dc1  <all>
+client2  192.168.1.12:8301  alive   client  1.8.5  2         dc1  <default>
+● nomad.service - Nomad
+   Loaded: loaded (/usr/lib/systemd/system/nomad.service; enabled; vendor preset: disabled)
+   Active: active (running) since Tue 2020-10-27 10:42:06 UTC; 17min ago
+     Docs: https://nomadproject.io/docs/
+ Main PID: 3564 (nomad)
+    Tasks: 7
+   Memory: 74.8M
+   CGroup: /system.slice/nomad.service
+           └─3564 /usr/bin/nomad agent -config /etc/nomad.d
+
+Oct 27 10:42:08 server nomad[3564]: 2020-10-27T10:42:08.887Z [WARN]  nomad.raft: heartbeat timeout reached, starting election: last-leader=
+Oct 27 10:42:08 server nomad[3564]: 2020-10-27T10:42:08.887Z [INFO]  nomad.raft: entering candidate state: node="Node at 192.168.1.10:4647 [Candidate]" term=2
+Oct 27 10:42:08 server nomad[3564]: 2020-10-27T10:42:08.892Z [INFO]  nomad.raft: election won: tally=1
+Oct 27 10:42:08 server nomad[3564]: 2020-10-27T10:42:08.892Z [INFO]  nomad.raft: entering leader state: leader="Node at 192.168.1.10:4647 [Leader]"
+Oct 27 10:42:08 server nomad[3564]: 2020-10-27T10:42:08.894Z [INFO]  nomad: cluster leadership acquired
+Oct 27 10:42:08 server nomad[3564]: 2020-10-27T10:42:08.901Z [INFO]  nomad.core: established cluster id: cluster_id=11877de3-3527-326f-0eb6-241ebe3b33cf create_time=1603795328900106540
+Oct 27 10:42:13 server nomad[3564]: 2020-10-27T10:42:13.497Z [WARN]  consul.sync: failed to update services in Consul: error="Put "http://127.0.0.1:8500/v1/agent/service/register": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"
+Oct 27 10:43:00 server nomad[3564]: 2020-10-27T10:43:00.716Z [INFO]  consul.sync: successfully updated services in Consul
+Oct 27 10:50:13 server nomad[3564]: 2020-10-27T10:50:13.779Z [ERROR] http: request failed: method=GET path=/v1/namespaces error="Nomad Enterprise only endpoint" code=501
+Oct 27 10:50:34 server nomad[3564]: 2020-10-27T10:50:34.501Z [ERROR] http: request failed: method=GET path=/v1/namespace/default error="Nomad Enterprise only endpoint" code=501
+Name           Address       Port  Status  Leader  Protocol  Build   Datacenter  Region
+server.global  192.168.1.10  4648  alive   true    2         0.12.7  dc1         global
+ID        DC   Name     Class   Drain  Eligibility  Status
+2a7c849b  dc1  client2  <none>  false  eligible     ready
+353db696  dc1  client1  <none>  false  eligible     ready
