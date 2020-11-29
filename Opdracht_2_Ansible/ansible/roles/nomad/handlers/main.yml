@@ -1,4 +1,8 @@
 - name: restart_nomad
   service:
     name: nomad
+<<<<<<< HEAD
     state: restarted
+=======
+    state: restarted
+>>>>>>> df4e225c68fb1bed6f77305f65170af6b9e2862c

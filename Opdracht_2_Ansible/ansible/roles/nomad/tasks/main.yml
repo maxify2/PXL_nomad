@@ -14,6 +14,10 @@
     src: "{{ nomad_config_srcpath }}"
     dest: /etc/nomad.d/nomad.hcl
   notify: restart_nomad
+<<<<<<< HEAD
+=======
+    
+>>>>>>> df4e225c68fb1bed6f77305f65170af6b9e2862c
 
 - name: start nomad
   service:
