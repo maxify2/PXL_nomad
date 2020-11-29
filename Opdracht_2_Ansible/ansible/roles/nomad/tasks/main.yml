@@ -13,6 +13,7 @@
   copy:
     src: "{{ nomad_config_srcpath }}"
     dest: /etc/nomad.d/nomad.hcl
+  notify: restart_nomad
 
 - name: start nomad
   service:
