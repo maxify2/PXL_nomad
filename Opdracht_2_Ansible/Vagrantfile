@@ -18,7 +18,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ansible.host_vars = {
         "server" => {"ansible_connection" => "local",
                      "nomad_config_srcpath" => "files/nomadserver.hcl",
-                     "consul_config_srcpath" => "files/consulserver.hcl"}
+                     "consul_bind_addr_ip" => "\"10.0.0.10\"",
+                     "consul_server_true" => "server = true",
+                     "consul_bootstrap_1" => "bootstrap_expect=1",
+                     "retry_join_client" => ""}
       }
       ansible.playbook = "ansible/playbook.yml"
     end
@@ -36,7 +39,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ansible.host_vars = {
         "client1" => {"ansible_connection" => "local",
                       "nomad_config_srcpath" => "files/nomadclient.hcl",
-                      "consul_config_srcpath" => "files/consulclient.hcl"}
+                      "consul_bind_addr_ip" => "\"10.0.0.11\"",
+                      "consul_server_true" => "server = false",
+                      "consul_bootstrap_1" => "",
+                      "retry_join_client" => "[\"10.0.0.10\"]"}
       }
       ansible.playbook = "ansible/playbook.yml"
     end
@@ -53,9 +59,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "clients" => ["client1","client2"]
       }
       ansible.host_vars = {
-        "client2" => {"ansible_connection" => "local",
+       "client2" => {"ansible_connection" => "local",
                       "nomad_config_srcpath" => "files/nomadclient.hcl",
-                      "consul_config_srcpath" => "files/consulclient.hcl"}
+                      "consul_bind_addr_ip" => "\"10.0.0.12\"",
+                      "consul_server_true" => "server = false",
+                      "consul_bootstrap_1" => "",
+                      "retry_join_client" => "[\"10.0.0.10\"]"}
       }
       ansible.playbook = "ansible/playbook.yml"
     end

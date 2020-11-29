@@ -9,10 +9,13 @@
     name: consul
     state: latest
 
-- name: consul.hcl config
-  copy:
-    src: "{{ consul_config_srcpath }}"
+- name: consul config from template
+  template:
+    src: consul_config.j2
     dest: /etc/consul.d/consul.hcl
+    owner: root
+    group: root
+    mode: 0644
 
 - name: start consul
   service:
