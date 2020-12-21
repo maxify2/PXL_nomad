@@ -1,0 +1,28 @@
+---
+- hosts: all
+  become: true
+  tasks: 
+
+  - name: Update repo cache
+    yum:
+      update_cache: yes
+  
+  - name: Install yum-utils
+    yum:
+      name: yum-utils
+      state: latest
+
+- hosts: servers
+  become: true
+  roles:
+    - docker
+    - consul
+    - nomad
+
+- hosts: clients
+  become: true
+  roles:
+    - docker
+    - consul
+    - nomad
+

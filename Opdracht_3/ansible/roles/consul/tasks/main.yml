@@ -1,0 +1,25 @@
+- name: Configuring hashicorp repo
+  get_url:
+    url: https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+    dest: /etc/yum.repos.d/hashicorp.repo
+    mode: 0644
+
+- name: Install Consul
+  yum:
+    name: consul
+    state: latest
+
+- name: consul config from template
+  template:
+    src: consul_config.j2
+    dest: /etc/consul.d/consul.hcl
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart_consul
+
+- name: start consul
+  service:
+    name: consul
+    state: started
+    enabled: yes
