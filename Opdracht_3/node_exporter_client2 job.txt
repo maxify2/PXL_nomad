@@ -35,6 +35,8 @@ job "node_exporter_client2" {
 
       service {
         name = "nodeExporter"
+        tags = ["http", "metrics"]
+        port = "node_exporter_ui"
       }
     }
   }

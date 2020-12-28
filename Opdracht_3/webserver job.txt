@@ -1,0 +1,56 @@
+job "webserver" {
+  datacenters = ["dc1"]
+  type = "service"
+
+  group "webserver" {
+    count = 1
+
+    network {
+      port "webserver_web" {
+        to = 80
+        static = 80
+      }
+    }
+
+    task "webserver" {
+      template {
+        change_mode = "noop"
+        destination = "local/server_status.conf"
+
+        data = <<EOH
+
+ExtendedStatus on
+<Location /server-status>
+    SetHandler server-status
+    Order deny,allow
+    Deny from all
+    Allow from 127.0.0.1
+</Location>
+
+EOH
+      }
+      driver = "docker"
+
+      config {
+        image = "httpd"
+        force_pull = true
+        volumes = [
+          "local/server_status.conf:/usr/local/apache2/conf/httpd.conf",
+        ]
+        ports = ["webserver_web"]
+        logging {
+          type = "journald"
+          config {
+            tag = "WEBSERVER"
+          }
+        }
+      }
+
+      service {
+        name = "webserver"
+        tags = ["http", "metrics"]
+        port = "webserver_web"
+      }
+    }
+  }
+}
