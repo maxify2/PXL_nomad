@@ -9,3 +9,7 @@ telemetry {
 
 links:
 https://learn.hashicorp.com/tutorials/nomad/prometheus-metrics
+
+#grafana 1860 Prometheus Node Exporter Full
+#grafana 6278 Nomad Cluster
+#grafana 6281 Nomad Jobs

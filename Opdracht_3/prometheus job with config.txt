@@ -33,6 +33,15 @@ global:
   scrape_interval:     5s
   evaluation_interval: 5s
 
+rule_files:
+ - rules.yml
+
+alerting:
+ alertmanagers:
+ - consul_sd_configs:
+   - server: '{{ env "NOMAD_IP_prometheus_ui" }}:8500'
+     services: ['alertmanager']
+
 scrape_configs:
 
   - job_name: 'nomad_metrics'
@@ -62,9 +71,33 @@ scrape_configs:
       regex: '(.*)http(.*)'
       action: keep
 
+  - job_name: 'webserver'
+
+    consul_sd_configs:
+    - server: '{{ env "NOMAD_IP_prometheus_ui" }}:8500'
+      services: ['webserver']
+
+    metrics_path: /metrics
+
 EOH
       }
-
+      template{
+        change_mode = "noop"
+        destination = "local/rules.yml"
+        data = <<EOH
+---
+groups:
+- name: prometheus_alerts
+  rules:
+  - alert: Webserver down
+    expr: absent(up{job="webserver"})
+    for: 10s
+    labels:
+      severity: critical
+    annotations:
+      description: "Our webserver is down."
+EOH 
+      }
       driver = "docker"
 
       config {
@@ -72,6 +105,7 @@ EOH
         force_pull = true
         volumes = [
           "local/prometheus.yml:/etc/prometheus/prometheus.yml",
+          "local/rules.yml:/etc/prometheus/rules.yml"
         ]
 
         ports = ["prometheus_ui"]

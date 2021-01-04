@@ -28,6 +28,8 @@ job "alertmanager" {
       }
       service {
         name = "alertmanager"
+        tags = ["alerts"]
+        port = "alertmanager_ui"
       }
     }
   }
