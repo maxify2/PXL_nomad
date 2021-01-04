@@ -71,11 +71,11 @@ scrape_configs:
       regex: '(.*)http(.*)'
       action: keep
 
-  - job_name: 'webserver'
+  - job_name: 'cAdvisor'
 
     consul_sd_configs:
     - server: '{{ env "NOMAD_IP_prometheus_ui" }}:8500'
-      services: ['webserver']
+      services: ['cadvisor']
 
     metrics_path: /metrics
 
