@@ -4,6 +4,11 @@ server {
     enabled = true
     bootstrap_expect = 1
 }
+client {
+    enabled = true
+    servers = ["10.0.0.10:4647"]
+    network_interface = "eth1"
+}
 
 telemetry {
  collection_interval = "5s",

@@ -1,0 +1,43 @@
+job "node_exporter_server" {
+  datacenters = ["dc1"]
+  type = "service"
+
+  group "node_exporter" {
+    count = 1
+
+    network {
+      port "node_exporter_ui" {
+        to = 9100
+        static = 9100
+      }
+    }
+
+    task "node_exporter" {
+      driver = "docker"
+
+      affinity {
+        attribute = "${node.unique.name}"
+        value     = "server"
+        weight    = 100
+      }
+
+      config {
+        image = "prom/node-exporter:latest"
+        force_pull = true
+        ports = ["node_exporter_ui"]
+        logging {
+          type = "journald"
+          config {
+            tag = "NODE_EXPORTER"
+          }
+        }
+      }
+
+      service {
+        name = "nodeExporter"
+        tags = ["http", "metrics"]
+        port = "node_exporter_ui"
+      }
+    }
+  }
+}
